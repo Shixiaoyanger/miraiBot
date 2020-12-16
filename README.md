@@ -1,0 +1,1 @@
+一个基于[mirai](https://github.com/mamoe/mirai) 的多功能机器人

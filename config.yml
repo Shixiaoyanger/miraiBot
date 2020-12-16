@@ -1,0 +1,27 @@
+# QQ账号相关配置
+qqAccount:
+  # QQ账号
+  qq: 0
+  # QQ账号密码
+  password: ''
+  # 管理员账号，管理机器人和接收机器人状态消息
+  adminQQ: 0
+# 心跳周期. 过长会导致被服务器断开连接，默认60s
+heartbeatPeriod: 60
+# 识别为命令的符号，默认 "."  "。" "!"  "/"
+commandPrefix:
+  - .
+  - 。
+  - !
+  - /
+# 定时任务线程池 默认 poolSize = 4
+threadPoolSize: 4
+# 使用的协议类型 默认 Android 手机 可选的有：
+# ANDROID_PHONE ：Android 手机.
+# ANDROID_PAD ：Android 平板.
+# ANDROID_WATCH ：Android 手表.
+protocol: ANDROID_PHONE
+# 搜图相关
+imageSearchKey:
+  # sauceNao API Key
+  sauceNao: ''
