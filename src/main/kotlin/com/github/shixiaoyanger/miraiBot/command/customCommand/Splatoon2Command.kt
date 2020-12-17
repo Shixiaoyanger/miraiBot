@@ -1,4 +1,4 @@
-package com.github.shixiaoyanger.miraiBot.command.CustomCommand
+package com.github.shixiaoyanger.miraiBot.command.customCommand
 
 import cn.hutool.http.HttpUtil
 import com.github.shixiaoyanger.miraiBot.bot.BotData

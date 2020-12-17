@@ -1,4 +1,4 @@
-package com.github.shixiaoyanger.miraiBot.command.CustomCommand
+package com.github.shixiaoyanger.miraiBot.command.customCommand
 
 import cn.hutool.core.io.IORuntimeException
 import com.github.shixiaoyanger.miraiBot.bot.BotData

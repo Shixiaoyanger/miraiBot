@@ -5,9 +5,10 @@ import com.github.shixiaoyanger.miraiBot.bot.BotData.defaultLog
 import com.github.shixiaoyanger.miraiBot.bot.BotData.serviceLogger
 import com.github.shixiaoyanger.miraiBot.command.CommandExecutor
 import com.github.shixiaoyanger.miraiBot.command.CommandExecutor.executeCommand
-import com.github.shixiaoyanger.miraiBot.command.CustomCommand.ImageSearchCommand
-import com.github.shixiaoyanger.miraiBot.command.CustomCommand.RsshubCommand
-import com.github.shixiaoyanger.miraiBot.command.CustomCommand.Splatoon2Command
+import com.github.shixiaoyanger.miraiBot.command.customCommand.HitokotoCommand
+import com.github.shixiaoyanger.miraiBot.command.customCommand.ImageSearchCommand
+import com.github.shixiaoyanger.miraiBot.command.customCommand.RsshubCommand
+import com.github.shixiaoyanger.miraiBot.command.customCommand.Splatoon2Command
 import com.github.shixiaoyanger.miraiBot.pusher.ReportTemperaturePusher
 import com.github.shixiaoyanger.miraiBot.pusher.RsshubPusher
 import com.github.shixiaoyanger.miraiBot.utils.TaskUtil.runTask
@@ -113,7 +114,8 @@ fun registerCommand() {
             listOf(
                     Splatoon2Command(),
                     RsshubCommand(),
-                    ImageSearchCommand()
+                    ImageSearchCommand(),
+                    HitokotoCommand()
             )
 
     )

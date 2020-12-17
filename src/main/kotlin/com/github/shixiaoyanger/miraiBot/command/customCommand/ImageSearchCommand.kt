@@ -1,4 +1,4 @@
-package com.github.shixiaoyanger.miraiBot.command.CustomCommand
+package com.github.shixiaoyanger.miraiBot.command.customCommand
 
 import com.github.shixiaoyanger.miraiBot.bot.BotData.defaultLogger
 import com.github.shixiaoyanger.miraiBot.command.ChatCommand
@@ -28,17 +28,26 @@ class ImageSearchCommand : ChatCommand {
     }
 
     override fun getName(): String {
-        return "搜图"
+        return "/搜图  查找图片来源"
     }
 
     override fun getHelp(): String {
-        return "搜图帮助"
+        return """
+            欢迎使用搜图功能：
+            
+            使用样例：
+            /搜图
+            [图片]
+            
+            手机端查询方法：
+            聊天框输入 /搜图 ，点击相册选择图片，点击发送         
+        """.trimIndent()
     }
 
     private suspend fun searchImage(event: MessageEvent): MessageChain {
         val message = MessageChainBuilder()
 
-        val imageUrl = event.message[Image]?.queryUrl() ?: return message.build("呜呜，没有找到符合的图片~")
+        val imageUrl = event.message[Image]?.queryUrl() ?: return message.build(getHelp())
 
         val result = sauceNaoSearch(imageUrl)
 

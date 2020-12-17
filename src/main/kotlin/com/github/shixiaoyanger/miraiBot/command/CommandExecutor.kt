@@ -46,7 +46,8 @@ object CommandExecutor {
                 commands.forEach {
                     add("\uD83D\uDD39${it.getName()}\n")
                 }
-                add("\n获得进一步帮助，请输入命令如：/rss")
+                add("\n获得进一步帮助，请输入命令如：/rss\n\n" +
+                        "命令前缀 / 可用[ ${config.commandPrefix.joinToString("  ")} ]中的任意一个代替")
             }
         }
         return buildMessageChain { }
