@@ -18,7 +18,7 @@ data class Config(
         @Comment("使用的协议类型 默认 Android 手机 可选的有：\nANDROID_PHONE ：Android 手机.\nANDROID_PAD ：Android 平板.\nANDROID_WATCH ：Android 手表.")
         val protocol: BotConfiguration.MiraiProtocol = BotConfiguration.MiraiProtocol.ANDROID_PHONE,
         @Comment("搜图相关")
-        val imageSearchKey: ImageSearchKey = ImageSearchKey("")
+        val imageSearch: ImageSearch = ImageSearch("", false)
 ) {
     @Serializable
     data class QQAccount(
@@ -31,8 +31,10 @@ data class Config(
     )
 
     @Serializable
-    data class ImageSearchKey(
+    data class ImageSearch(
             @Comment("sauceNao API Key")
-            val sauceNao: String = ""
+            val sauceNao: String = "",
+            @Comment("true 开启，false 关闭。关闭后发涩图功能只能发全年龄图片。")
+            val adultMode: Boolean = false
     )
 }

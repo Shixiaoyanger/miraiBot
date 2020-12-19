@@ -1,10 +1,11 @@
 package com.github.shixiaoyanger.miraiBot.command.customCommand
 
+import com.github.shixiaoyanger.miraiBot.bot.BotData.config
 import com.github.shixiaoyanger.miraiBot.bot.BotData.defaultLogger
 import com.github.shixiaoyanger.miraiBot.command.ChatCommand
-import com.github.shixiaoyanger.miraiBot.utils.ImageSearchUtil.Rating
-import com.github.shixiaoyanger.miraiBot.utils.ImageSearchUtil.getKonachanImg
-import com.github.shixiaoyanger.miraiBot.utils.ImageSearchUtil.sauceNaoSearch
+import com.github.shixiaoyanger.miraiBot.model.imageSearch.ImageSearch.Rating
+import com.github.shixiaoyanger.miraiBot.model.imageSearch.ImageSearch.getKonachanImg
+import com.github.shixiaoyanger.miraiBot.model.imageSearch.ImageSearch.sauceNaoSearch
 import com.github.shixiaoyanger.miraiBot.utils.RssUtil.getImage
 import com.github.shixiaoyanger.miraiBot.utils.build
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +41,30 @@ class ImageSearchCommand : ChatCommand {
             [图片]
             
             手机端查询方法：
-            聊天框输入 /搜图 ，点击相册选择图片，点击发送         
-        """.trimIndent()
+            聊天框输入 /搜图 ，点击相册选择图片，点击发送   
+            
+            ========================
+            
+            🎉友情提供来一份涩图功能🎉
+            使用命令为：
+            /setu 或者 /涩图 
+            
+            
+        """.trimIndent() + getSetuHelp()
+    }
+
+    private fun getSetuHelp(): String {
+        return if (config.imageSearch.adultMode) {
+            """
+                可加参数如 /setu s
+                其中：
+                s 代表全年龄safe
+                q 代表 15+
+                e 代表 18+
+            """.trimIndent()
+        } else {
+            ""
+        }
     }
 
     private suspend fun searchImage(event: MessageEvent): MessageChain {
@@ -63,13 +86,17 @@ class ImageSearchCommand : ChatCommand {
         return message.build("呜呜，没有找到符合的图片~")
     }
 
-    suspend fun getSetu(event: MessageEvent, args: List<String>): MessageChain {
+    private suspend fun getSetu(event: MessageEvent, args: List<String>): MessageChain {
 
-        val rating = when (args.getOrNull(1)) {
-            "s", "safe" -> Rating.SAFE
-            "q", "questionable" -> Rating.QUESTIONABLE
-            "e", "explicit" -> Rating.EXPLICIT
-            else -> Rating.SAFE
+        val rating = if (config.imageSearch.adultMode) {
+            when (args.getOrNull(1)) {
+                "s", "safe" -> Rating.SAFE
+                "q", "questionable" -> Rating.QUESTIONABLE
+                "e", "explicit" -> Rating.EXPLICIT
+                else -> Rating.SAFE
+            }
+        } else {
+            Rating.SAFE
         }
         val cost = measureTimeMillis {
             val image = getKonachanImg(rating = rating)

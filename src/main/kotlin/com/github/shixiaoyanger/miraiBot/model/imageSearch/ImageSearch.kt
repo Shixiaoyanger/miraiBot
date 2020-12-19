@@ -1,10 +1,10 @@
-package com.github.shixiaoyanger.miraiBot.utils
+package com.github.shixiaoyanger.miraiBot.model.imageSearch
 
 import cn.hutool.http.HttpUtil
 import com.github.shixiaoyanger.miraiBot.bot.BotData.config
 import com.github.shixiaoyanger.miraiBot.bot.BotData.defaultLogger
 import com.github.shixiaoyanger.miraiBot.bot.BotData.serviceLogger
-import com.github.shixiaoyanger.miraiBot.model.imageSearch.ImageSearchResult
+import com.github.shixiaoyanger.miraiBot.utils.RssUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.imageio.ImageIO
 import kotlin.random.Random
 
-object ImageSearchUtil {
+object ImageSearch {
     private const val sauceNaoUrl = "https://saucenao.com/search.php"
     private const val konachanUrl = "https://konachan.net/post.json"
     private const val imageKeyUrl = "http://konachan.wjcodes.com/FindTag.php"
@@ -27,7 +27,7 @@ object ImageSearchUtil {
         lateinit var data: String
         try {
             // 构造post表单
-            val param = "url=$imgUrl&api_key=${config.imageSearchKey.sauceNao}&output_type=2&numres=3"
+            val param = "url=$imgUrl&api_key=${config.imageSearch.sauceNao}&output_type=2&numres=3"
 
             data = HttpUtil.post(sauceNaoUrl, param)
 
@@ -100,8 +100,8 @@ object ImageSearchUtil {
                         indexes.drop(0).forEach {
                             val sampleUrl = jsonArray[it].jsonObject["sample_url"]!!.jsonPrimitive.content
                             val md5 = jsonArray[it].jsonObject["md5"]?.jsonPrimitive?.content ?: sampleUrl
-                            val f = HttpUtil.downloadFileFromUrl(sampleUrl, File.createTempFile(md5, ".jpg"))
-                            imageSet.add(f)
+                            val file = HttpUtil.downloadFileFromUrl(sampleUrl, File.createTempFile(md5, ".jpg"))
+                            imageSet.add(file)
                         }
                         imageCache[rating]?.addAll(imageSet)
                         defaultLogger.info("image cached, imageSet size = ${imageCache[rating]?.size ?: -1}")
