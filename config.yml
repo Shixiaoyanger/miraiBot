@@ -22,6 +22,8 @@ threadPoolSize: 4
 # ANDROID_WATCH ：Android 手表.
 protocol: ANDROID_PHONE
 # 搜图相关
-imageSearchKey:
+imageSearch:
   # sauceNao API Key
   sauceNao: ''
+  # true 开启，false 关闭。关闭后发涩图功能只能发全年龄图片。
+  adultMode: true
