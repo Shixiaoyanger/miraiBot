@@ -2,6 +2,8 @@ package com.github.shixiaoyanger.miraiBot.utils
 
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.MessageChainBuilder
+import net.mamoe.mirai.message.data.PlainText
+import net.mamoe.mirai.message.data.asMessageChain
 import java.awt.Graphics
 
 
@@ -26,5 +28,19 @@ fun MessageChainBuilder.build(defaultMessage: String): MessageChain {
     } else {
         messageChain
     }
+}
+
+fun String.asMessageChain(): MessageChain {
+    return PlainText(this).asMessageChain()
+}
+
+// 判断是否是英文
+fun String.isEnglish(): Boolean {
+    this.forEach {
+        if (it.toInt() > 128) {
+            return false
+        }
+    }
+    return true
 }
 

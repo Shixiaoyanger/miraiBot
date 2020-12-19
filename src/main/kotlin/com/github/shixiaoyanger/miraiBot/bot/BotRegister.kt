@@ -5,10 +5,7 @@ import com.github.shixiaoyanger.miraiBot.bot.BotData.defaultLog
 import com.github.shixiaoyanger.miraiBot.bot.BotData.serviceLogger
 import com.github.shixiaoyanger.miraiBot.command.CommandExecutor
 import com.github.shixiaoyanger.miraiBot.command.CommandExecutor.executeCommand
-import com.github.shixiaoyanger.miraiBot.command.customCommand.HitokotoCommand
-import com.github.shixiaoyanger.miraiBot.command.customCommand.ImageSearchCommand
-import com.github.shixiaoyanger.miraiBot.command.customCommand.RsshubCommand
-import com.github.shixiaoyanger.miraiBot.command.customCommand.Splatoon2Command
+import com.github.shixiaoyanger.miraiBot.command.customCommand.*
 import com.github.shixiaoyanger.miraiBot.pusher.ReportTemperaturePusher
 import com.github.shixiaoyanger.miraiBot.pusher.RsshubPusher
 import com.github.shixiaoyanger.miraiBot.utils.TaskUtil.runTask
@@ -63,7 +60,7 @@ suspend fun startQQBot() {
         // 停止服务时保存数据
         Runtime.getRuntime().addShutdownHook(Thread {
             BotData.saveData()
-            runBlocking { bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("数据保存成功") }
+            runBlocking { bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
         })
         // 定时保存数据
         runTask(1, 1, TimeUnit.HOURS) { BotData.saveData() }
@@ -73,11 +70,11 @@ suspend fun startQQBot() {
 
         serviceLogger.info("start QQ bot successfully!")
     } catch (e: Exception) {
-
-        bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("机器人启动时发生了一些错误，${e.message}")
+        serviceLogger.error("初始化失败! $e")
+        bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:机器人启动时发生了一些错误，${e.message}")
     }
     val time = getDateTime(System.currentTimeMillis(), TimeUtils.Format.hms)
-    bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("机器人在$time 启动成功")
+    bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:机器人在$time 启动成功")
 
     bot.join()//等到直到断开连接
 }
@@ -115,9 +112,9 @@ fun registerCommand() {
                     Splatoon2Command(),
                     RsshubCommand(),
                     ImageSearchCommand(),
-                    HitokotoCommand()
+                    HitokotoCommand(),
+                    TranslateCommand()
             )
-
     )
 }
 
