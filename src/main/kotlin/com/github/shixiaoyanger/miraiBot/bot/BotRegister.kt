@@ -59,8 +59,13 @@ suspend fun startQQBot() {
         BotData.loadData()
         // 停止服务时保存数据
         Runtime.getRuntime().addShutdownHook(Thread {
-            BotData.saveData()
-            runBlocking { bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
+            try {
+                BotData.saveData()
+                runBlocking { bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
+                serviceLogger.info("数据保存成功")
+            } catch (e: Exception) {
+                serviceLogger.error("数据保存失败", e)
+            }
         })
         // 定时保存数据
         runTask(1, 1, TimeUnit.HOURS) { BotData.saveData() }
