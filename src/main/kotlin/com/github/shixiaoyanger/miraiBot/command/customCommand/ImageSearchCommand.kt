@@ -46,9 +46,9 @@ class ImageSearchCommand : ChatCommand {
             ========================
             
             🎉友情提供来一份涩图功能🎉
+            
             使用命令为：
             /setu 或者 /涩图 
-            
             
         """.trimIndent() + getSetuHelp()
     }
@@ -56,7 +56,8 @@ class ImageSearchCommand : ChatCommand {
     private fun getSetuHelp(): String {
         return if (config.imageSearch.adultMode) {
             """
-                可加参数如 /setu s
+                
+                可加参数如：  /setu s
                 其中：
                 s 代表全年龄safe
                 q 代表 15+

@@ -54,8 +54,6 @@ object RssUtil {
         val result = HttpRequest.get(url).timeout(10_000).let {
             println(it.headers())
             it.execute()
-
-            //  it.execute()
         }
 
 

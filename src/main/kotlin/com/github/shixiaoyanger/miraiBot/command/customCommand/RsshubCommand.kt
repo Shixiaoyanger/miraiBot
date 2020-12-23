@@ -14,6 +14,7 @@ import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.event.events.FriendEvent
 import net.mamoe.mirai.event.events.GroupEvent
 import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.message.TempMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.buildMessageChain
@@ -75,9 +76,8 @@ class RsshubCommand : ChatCommand {
             when (event) {
                 //TODO 确认事件个数
                 is GroupEvent -> getGroup(event.subject.id).rsshubSubscribeLinks.add(url)
-                is FriendEvent -> getUser(event.subject.id).rsshubSubscribeLinks.add(url)
+                is FriendEvent, is TempMessageEvent -> getUser(event.subject.id).rsshubSubscribeLinks.add(url)
             }
-
 
             message.add("订阅成功!\n")
             message.add("订阅主题：${feed.title}\n")
