@@ -77,7 +77,7 @@ class Splatoon2Command : ChatCommand {
     }
 
     private fun getSchedule(idx: Int = 0): BufferedImage? {
-        val cache = BotData.splatoonCache
+        val cache = BotData.splatoonCache.schedule
         var refresh = false
 
         val data = if (cache != null && cache.expire > System.currentTimeMillis()) {
@@ -92,24 +92,27 @@ class Splatoon2Command : ChatCommand {
             }
         }
 
-        val schedule: Schedule = json.decodeFromString(data)
 
-        //设置缓存
-        if (refresh) BotData.splatoonCache = BotData.SplatoonData(data, schedule.gachiList[0].endTime * 1000)
-        serviceLogger.verbose0("喷射战士schedule日程安排缓存更新成功")
-
-
-        val drawer = DrawImageImpl(ScheduleMapWidth, ScheduleMapHeight, scheduleColor)
         return try {
+            val schedule: Schedule = json.decodeFromString(data)
+
+            //设置缓存
+            if (refresh) BotData.splatoonCache.schedule = BotData.SplatoonCache.SplatoonData(data, schedule.gachiList[0].endTime * 1000)
+            serviceLogger.verbose0("喷射战士schedule日程安排缓存更新成功")
+
+            val drawer = DrawImageImpl(ScheduleMapWidth, ScheduleMapHeight, scheduleColor)
+
             drawer.drawSchedule(schedule, idx)
         } catch (e: Exception) {
             serviceLogger.error("喷射战士画涂地、真格、组排日程安排失败", e)
+            // 清空缓存
+            BotData.splatoonCache.schedule = null
             null
         }
     }
 
     private fun getCoopSchedule(): BufferedImage? {
-        val cache = BotData.splatoonCache
+        val cache = BotData.splatoonCache.coopSchedule
         var refresh = false
 
         val data = if (cache != null && cache.expire > System.currentTimeMillis()) {
@@ -123,17 +126,21 @@ class Splatoon2Command : ChatCommand {
                 return null
             }
         }
-        val coopSchedules: CoopSchedules = json.decodeFromString(data)
 
-        //设置缓存
-        if (refresh) BotData.splatoonCache = BotData.SplatoonData(data, coopSchedules.details[0].endTime * 1000)
-        serviceLogger.verbose0("喷射战士coopSchedule打工安排缓存更新成功")
-
-        val drawer = DrawImageImpl(CoopScheduleWidth, CoopScheduleHeight, gachiColor)
         return try {
+            val coopSchedules: CoopSchedules = json.decodeFromString(data)
+
+            //设置缓存
+            if (refresh) BotData.splatoonCache.coopSchedule = BotData.SplatoonCache.SplatoonData(data, coopSchedules.details[0].endTime * 1000)
+            serviceLogger.verbose0("喷射战士coopSchedule打工安排缓存更新成功")
+
+            val drawer = DrawImageImpl(CoopScheduleWidth, CoopScheduleHeight, gachiColor)
+
             drawer.drawCoopSchedule(coopSchedules)
         } catch (e: Exception) {
             serviceLogger.error("喷射战士画鲑鱼打工图失败", e)
+            // 清空缓存
+            BotData.splatoonCache.coopSchedule = null
             null
         }
     }

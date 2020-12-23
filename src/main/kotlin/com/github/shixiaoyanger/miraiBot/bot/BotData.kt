@@ -40,9 +40,12 @@ object BotData {
     /**
      * splatoon日程缓存
      */
-    var splatoonCache: SplatoonData? = null
+    var splatoonCache: SplatoonCache = SplatoonCache(null, null)
 
-    class SplatoonData(val data: String, val expire: Long)
+    data class SplatoonCache(var schedule: SplatoonData?, var coopSchedule: SplatoonData?) {
+        data class SplatoonData(val data: String, val expire: Long)
+    }
+
     //endregion database
 
     //region log
