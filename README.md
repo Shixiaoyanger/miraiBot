@@ -1,4 +1,4 @@
-一个基于[mirai](https://github.com/mamoe/mirai) 的多功能机器人
+# 一个基于[mirai](https://github.com/mamoe/mirai) 的多功能机器人
 
 ## 🌈目前支持的功能
 
@@ -19,6 +19,8 @@
     ```
 
 2. 编译
+> 请确保已安装JDK 8+环境，如何安装请自行搜索。
+
 - windows:
 
     ```powershell
