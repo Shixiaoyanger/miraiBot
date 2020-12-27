@@ -14,19 +14,25 @@
 
 1. 下载本仓库
 
-```git clone https://github.com/Shixiaoyanger/miraiBot.git```
+    ```bash
+    git clone https://github.com/Shixiaoyanger/miraiBot.git
+    ```
 
 2. 编译
 - windows:
 
-    ```gradlew shadowJar```
+    ```powershell
+    gradlew shadowJar
+    ```
     
 - linux:
 
-    ```./gradlew shadowJar```
+    ```bash
+    ./gradlew shadowJar
+    ```
     
 
-编译成功后，在`./build/libs`目录下会找到编译得到的jar包`MiraiBot-{version}-all.jar`
+    编译成功后，在`./build/libs`目录下会找到编译得到的jar包`MiraiBot-{version}-all.jar`
 
 3. 运行
 
@@ -34,6 +40,7 @@
    - 将[config.yml](https://github.com/Shixiaoyanger/miraiBot/blob/master/config.yml)复制到与jar包同目录下；
    - 在[config.yml](https://github.com/Shixiaoyanger/miraiBot/blob/master/config.yml)中进行相关配置，如账号密码等；
    - 在命令终端输入`java -jar  MiraiBot-{version}-all.jar`即可运行。
+
 
    >  PS: `config.yml`也可以不复制，第一次运行项目后会在项目目录自动生成，修改生成的`config.yml`再次启动也可以哦。
 
