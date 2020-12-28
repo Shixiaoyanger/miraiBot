@@ -25,10 +25,10 @@ import net.mamoe.mirai.utils.secondsToMillis
 import java.util.concurrent.TimeUnit
 
 
-suspend fun startQQBot() {
+suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
     val bot = Bot(
-            config.qqAccount.qq,
-            config.qqAccount.password
+            qq = qq,
+            password = password
     ) {
         // 覆盖默认的配置
         protocol = config.protocol
@@ -61,7 +61,7 @@ suspend fun startQQBot() {
         Runtime.getRuntime().addShutdownHook(Thread {
             try {
                 BotData.saveData()
-                runBlocking { bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
+                runBlocking { bot.getFriendOrNull(adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
                 serviceLogger.info("数据保存成功")
             } catch (e: Exception) {
                 serviceLogger.error("数据保存失败", e)
@@ -76,10 +76,10 @@ suspend fun startQQBot() {
         serviceLogger.info("start QQ bot successfully!")
     } catch (e: Exception) {
         serviceLogger.error("初始化失败! $e")
-        bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:机器人启动时发生了一些错误，${e.message}")
+        bot.getFriendOrNull(adminQQ)?.sendMessage("${config.protocol}:机器人启动时发生了一些错误，${e.message}")
     }
     val time = getDateTime(System.currentTimeMillis(), TimeUtils.Format.hms)
-    bot.getFriendOrNull(config.qqAccount.adminQQ)?.sendMessage("${config.protocol}:机器人在$time 启动成功")
+    bot.getFriendOrNull(adminQQ)?.sendMessage("${config.protocol}:机器人在$time 启动成功")
 
     bot.join()//等到直到断开连接
 }

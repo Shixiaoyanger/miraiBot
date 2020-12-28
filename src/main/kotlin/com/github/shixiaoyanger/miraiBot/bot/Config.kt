@@ -27,7 +27,7 @@ data class Config(
             @Comment("QQ账号密码")
             var password: String = "",
             @Comment("管理员账号，管理机器人和接收机器人状态消息")
-            val adminQQ: Long = 0L
+            var adminQQ: Long = 0L
     )
 
     @Serializable
