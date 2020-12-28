@@ -39,12 +39,10 @@
 3. 运行
 
    - 将jar包复制到你想运行的位置;
-   - 将[config.yml](https://github.com/Shixiaoyanger/miraiBot/blob/master/config.yml)复制到与jar包同目录下；
-   - 在[config.yml](https://github.com/Shixiaoyanger/miraiBot/blob/master/config.yml)中进行相关配置，如账号密码等；
    - 在命令终端输入`java -jar  MiraiBot-{version}-all.jar`即可运行。
 
 
-   >  PS: `config.yml`也可以不复制，第一次运行项目后会在项目目录自动生成，修改生成的`config.yml`再次启动也可以哦。
+   >  PS: 配置文件[config.yml](./config.yml)会在第一次运行项目后会在项目目录自动生成，可以根据实际需求修改`config.yml`中的配置，重启机器人生效。
 
 4. 使用
 
