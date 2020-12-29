@@ -7,12 +7,15 @@ import com.github.shixiaoyanger.miraiBot.utils.readContent
 import com.github.shixiaoyanger.miraiBot.utils.writeAppend
 import com.github.shixiaoyanger.miraiBot.utils.writeJson
 import kotlinx.serialization.json.Json
+import net.mamoe.mirai.utils.MiraiInternalApi
+import net.mamoe.mirai.utils.MiraiLogger
 import net.mamoe.mirai.utils.PlatformLogger
 import net.mamoe.yamlkt.Yaml
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
+@OptIn(MiraiInternalApi::class)
 object BotData {
 
     /**
@@ -63,19 +66,19 @@ object BotData {
     /**
      * 自定义bot基础日志
      */
-    val defaultLogger: PlatformLogger = PlatformLogger("BotService", {
+    val defaultLogger: MiraiLogger = PlatformLogger("BotService") {
         defaultLog.writeAppend(it + "\n")
         println(it)
-    })
+    }
 
     /**
      * 服务日志
      */
-    val serviceLogger: PlatformLogger = PlatformLogger("Service", {
+    val serviceLogger: MiraiLogger = PlatformLogger("Service") {
         log.writeAppend(it + "\n")
         defaultLog.writeAppend(it + "\n")
         println(it)
-    })
+    }
 
     // endregion log
 

@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.message.upload
+import net.mamoe.mirai.utils.upload
 import java.util.concurrent.TimeUnit
 
 class RsshubPusher : Pusher {

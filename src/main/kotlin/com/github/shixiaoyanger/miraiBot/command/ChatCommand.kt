@@ -1,6 +1,6 @@
 package com.github.shixiaoyanger.miraiBot.command
 
-import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 
 interface ChatCommand {

@@ -13,12 +13,12 @@ import com.rometools.rome.io.ParsingFeedException
 import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.event.events.FriendEvent
 import net.mamoe.mirai.event.events.GroupEvent
-import net.mamoe.mirai.message.MessageEvent
-import net.mamoe.mirai.message.TempMessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
+import net.mamoe.mirai.event.events.TempMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.message.upload
+import net.mamoe.mirai.utils.upload
 
 class RsshubCommand : ChatCommand {
     override suspend fun execute(event: MessageEvent, args: List<String>): MessageChain {

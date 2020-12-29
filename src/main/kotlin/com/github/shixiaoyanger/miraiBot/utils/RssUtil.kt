@@ -87,11 +87,11 @@ object RssUtil {
     fun getImage(imageUrl: String?): BufferedImage? {
         if (imageUrl == null) return null
         return try {
-            defaultLogger.verbose0("RssUtil.getImage:开始下载图片")
+            defaultLogger.verbose("RssUtil.getImage:开始下载图片")
             val response = HttpRequest.get(imageUrl).execute()
             ImageIO.read(response.bodyStream())
         } catch (e: Exception) {
-            serviceLogger.verbose0("RssUtil.getImage:${e.message}, $imageUrl", e)
+            serviceLogger.verbose("RssUtil.getImage:${e.message}, $imageUrl", e)
             null
         }
     }

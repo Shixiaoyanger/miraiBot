@@ -32,6 +32,7 @@ fun File.writeText(content: String) {
     FileWriter.create(this).write(content, false)
 }
 
+// it will overwrite file content
 inline fun <reified T> File.writeJson(content: T) {
     if (!this.exists()) {
         this.createNewFile()
@@ -64,9 +65,7 @@ object FileUtil {
             val dateTime = getDateTime(System.currentTimeMillis(), TimeUtils.Format.ymd)
             val month = getDateTime(System.currentTimeMillis(), TimeUtils.Format.ym)
             val dir = getDictionary("logs/$month")
-            BotData.log = File(dir, "service-log $dateTime.log").also {
-                println(it.absoluteFile)
-            }
+            BotData.log = File(dir, "service-log $dateTime.log")
 
             BotData.log.createNewFile()
 

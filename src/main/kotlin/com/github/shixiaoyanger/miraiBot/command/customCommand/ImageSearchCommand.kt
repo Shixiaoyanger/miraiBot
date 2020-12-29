@@ -10,9 +10,10 @@ import com.github.shixiaoyanger.miraiBot.utils.RssUtil.getImage
 import com.github.shixiaoyanger.miraiBot.utils.build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.message.upload
+import net.mamoe.mirai.message.data.Image.Key.queryUrl
+import net.mamoe.mirai.utils.upload
 import kotlin.system.measureTimeMillis
 
 class ImageSearchCommand : ChatCommand {
