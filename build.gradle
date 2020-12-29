@@ -12,7 +12,7 @@ plugins {
 
 }
 
-def miraiCore = '2.0-M1'
+def miraiCore = '2.0-M2'
 def mainClass = 'com.github.shixiaoyanger.miraiBot.MainKt'
 group = 'com.github.shixiaoyanger'
 version = '1.1-SNAPSHOT'
