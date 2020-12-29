@@ -95,7 +95,7 @@ suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
  */
 fun Bot.messageDSL() {
     // 监听这个 bot 的来自所有群和好友的消息
-    this.subscribeMessages {
+    eventChannel.subscribeMessages {
         always {
             if (this is GroupMessageEvent && group.isBotMuted) return@always
 

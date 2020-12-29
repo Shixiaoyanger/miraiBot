@@ -10,8 +10,7 @@ import com.github.shixiaoyanger.miraiBot.model.rsshub.RsshubFeed
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.SyndFeedInput
 import com.rometools.rome.io.XmlReader
-import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
+import java.io.InputStream
 
 object RssUtil {
     fun updateRsshub(newFeed: RsshubFeed, oldFeed: RsshubFeed): List<RsshubEntry> {
@@ -84,12 +83,12 @@ object RssUtil {
 
     }
 
-    fun getImage(imageUrl: String?): BufferedImage? {
+    fun getImage(imageUrl: String?): InputStream? {
         if (imageUrl == null) return null
         return try {
             defaultLogger.verbose("RssUtil.getImage:开始下载图片")
             val response = HttpRequest.get(imageUrl).execute()
-            ImageIO.read(response.bodyStream())
+            return response.bodyStream()
         } catch (e: Exception) {
             serviceLogger.verbose("RssUtil.getImage:${e.message}, $imageUrl", e)
             null

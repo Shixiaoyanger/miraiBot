@@ -45,7 +45,7 @@ class DrawImageImpl(width: Int, height: Int, baseColor: Color) : DrawImage {
         g.drawRect(0, 0, width, height)
 
         //消除锯齿
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
     }
 
     override fun drawSchedule(schedule: Schedule, idx: Int): BufferedImage {

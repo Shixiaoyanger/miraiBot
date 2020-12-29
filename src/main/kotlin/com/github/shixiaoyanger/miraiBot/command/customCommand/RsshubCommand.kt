@@ -18,7 +18,7 @@ import net.mamoe.mirai.event.events.TempMessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.MessageChainBuilder
 import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.utils.upload
+import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 
 class RsshubCommand : ChatCommand {
     override suspend fun execute(event: MessageEvent, args: List<String>): MessageChain {
@@ -83,7 +83,7 @@ class RsshubCommand : ChatCommand {
             message.add("订阅主题：${feed.title}\n")
             feed.items.getOrNull(0)?.let { entry ->
                 message.add("标题：${entry.title}\n")
-                runBlocking { getImage(entry.imageUrl)?.let { message.add(it.upload(event.subject)) } }
+                runBlocking { getImage(entry.imageUrl)?.use { message.add(it.uploadAsImage(event.subject)) } }
                 message.add("${entry.description}\n")
                 message.add("内容链接：${entry.link}")
             }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.utils.upload
+import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import java.util.concurrent.TimeUnit
 
 class RsshubPusher : Pusher {
@@ -59,7 +59,7 @@ class RsshubPusher : Pusher {
             add("你订阅的${title}更新啦！\n")
             entries.forEach { entry ->
                 add("\n标题：${entry.title}\n")
-                RssUtil.getImage(entry.imageUrl)?.let { add(it.upload(contact)) }
+                RssUtil.getImage(entry.imageUrl)?.use { add(it.uploadAsImage(contact)) }
                 add("${entry.description}\n")
                 add("内容链接：${entry.link}\n")
             }
