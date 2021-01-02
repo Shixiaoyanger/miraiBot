@@ -9,13 +9,13 @@ import com.github.shixiaoyanger.miraiBot.model.splatoon.CoopSchedules
 import com.github.shixiaoyanger.miraiBot.model.splatoon.Schedule
 import com.github.shixiaoyanger.miraiBot.model.splatoon.consts.*
 import com.github.shixiaoyanger.miraiBot.model.splatoon.impl.DrawImageImpl
+import com.github.shixiaoyanger.miraiBot.utils.uploadAsImage
 import kotlinx.serialization.decodeFromString
-import net.mamoe.mirai.message.GroupMessageEvent
-import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.At
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.buildMessageChain
-import net.mamoe.mirai.message.upload
 import java.awt.image.BufferedImage
 
 class Splatoon2Command : ChatCommand {
@@ -29,14 +29,14 @@ class Splatoon2Command : ChatCommand {
             if (event is GroupMessageEvent) add(At(event.sender))
 
             when (args[1]) {
-                "下", "下图", "图" -> getSchedule(0)?.let { add(it.upload(event.subject)) }
+                "下", "下图", "图" -> getSchedule(0)?.let { add(it.uploadAsImage(event.subject)) }
 
                 "下下", "下下图", "图图" -> {
-                    getSchedule(0)?.let { add(it.upload(event.subject)) }
-                    getSchedule(1)?.let { add(it.upload(event.subject)) }
+                    getSchedule(0)?.let { add(it.uploadAsImage(event.subject)) }
+                    getSchedule(1)?.let { add(it.uploadAsImage(event.subject)) }
 
                 }
-                "工", "打工" -> getCoopSchedule()?.let { add(it.upload(event.subject)) }
+                "工", "打工" -> getCoopSchedule()?.let { add(it.uploadAsImage(event.subject)) }
 
                 else -> getHelp()
             }
@@ -98,7 +98,7 @@ class Splatoon2Command : ChatCommand {
 
             //设置缓存
             if (refresh) BotData.splatoonCache.schedule = BotData.SplatoonCache.SplatoonData(data, schedule.gachiList[0].endTime * 1000)
-            serviceLogger.verbose0("喷射战士schedule日程安排缓存更新成功")
+            serviceLogger.verbose("喷射战士schedule日程安排缓存更新成功")
 
             val drawer = DrawImageImpl(ScheduleMapWidth, ScheduleMapHeight, scheduleColor)
 
@@ -132,7 +132,7 @@ class Splatoon2Command : ChatCommand {
 
             //设置缓存
             if (refresh) BotData.splatoonCache.coopSchedule = BotData.SplatoonCache.SplatoonData(data, coopSchedules.details[0].endTime * 1000)
-            serviceLogger.verbose0("喷射战士coopSchedule打工安排缓存更新成功")
+            serviceLogger.verbose("喷射战士coopSchedule打工安排缓存更新成功")
 
             val drawer = DrawImageImpl(CoopScheduleWidth, CoopScheduleHeight, gachiColor)
 

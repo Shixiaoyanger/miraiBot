@@ -10,10 +10,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.*
-import java.awt.image.BufferedImage
 import java.io.File
+import java.io.InputStream
 import java.util.concurrent.ConcurrentHashMap
-import javax.imageio.ImageIO
 import kotlin.random.Random
 
 object ImageSearch {
@@ -65,7 +64,7 @@ object ImageSearch {
         EXPLICIT // 18+
     }
 
-    fun getKonachanImg(bound: Int = 100, tags: String = "", rating: Rating = Rating.SAFE): BufferedImage? {
+    fun getKonachanImg(bound: Int = 100, tags: String = "", rating: Rating = Rating.SAFE): InputStream? {
         defaultLogger.info("${imageCache[rating]}")
         var imageSet = imageCache[rating]
         if (imageSet == null) {
@@ -77,7 +76,7 @@ object ImageSearch {
             val result = imageSet.last()
             imageSet.remove(result)
             defaultLogger.info("use image cache, imageSet size = ${imageCache[rating]?.size ?: -1}")
-            return ImageIO.read(result)
+            return result.inputStream()
         }
         try {
             val page = Random.nextInt(bound)

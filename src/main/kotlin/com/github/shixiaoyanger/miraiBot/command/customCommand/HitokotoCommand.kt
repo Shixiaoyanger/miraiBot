@@ -5,9 +5,9 @@ import com.github.shixiaoyanger.miraiBot.bot.BotData
 import com.github.shixiaoyanger.miraiBot.bot.BotData.serviceLogger
 import com.github.shixiaoyanger.miraiBot.command.ChatCommand
 import com.github.shixiaoyanger.miraiBot.model.hitokoto.Hitokoto
+import com.github.shixiaoyanger.miraiBot.utils.asMessageChain
 import kotlinx.serialization.decodeFromString
-import net.mamoe.mirai.message.MessageEvent
-import net.mamoe.mirai.message.data.EmptyMessageChain
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 
 
@@ -16,8 +16,7 @@ import net.mamoe.mirai.message.data.MessageChain
  */
 class HitokotoCommand : ChatCommand {
     override suspend fun execute(event: MessageEvent, args: List<String>): MessageChain {
-        event.reply(getHitokoto())
-        return EmptyMessageChain
+        return getHitokoto().asMessageChain()
     }
 
     override fun getPrefix(): List<String> {

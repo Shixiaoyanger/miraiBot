@@ -1,18 +1,20 @@
 package com.github.shixiaoyanger.miraiBot.command
 
 import com.github.shixiaoyanger.miraiBot.bot.BotData.config
-import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 import net.mamoe.mirai.message.data.PlainText
 import net.mamoe.mirai.message.data.buildMessageChain
+import net.mamoe.mirai.message.data.firstIsInstanceOrNull
 import java.util.*
 
 /**
  * 处理聊天命令
  */
 object CommandExecutor {
+    private val helpCommand = listOf("help", "帮助")
+
     var commands: MutableList<ChatCommand> = mutableListOf()
-    val helpCommand = listOf("help", "帮助")
 
     /**
      * 添加命令
@@ -29,7 +31,7 @@ object CommandExecutor {
      * 执行命令
      */
     suspend fun executeCommand(event: MessageEvent): MessageChain {
-        val msg = event.message[PlainText].toString()
+        val msg = event.message.firstIsInstanceOrNull<PlainText>()?.content ?: ""
 
         if (isCommand(msg)) {
             //args 命令名+操作名
