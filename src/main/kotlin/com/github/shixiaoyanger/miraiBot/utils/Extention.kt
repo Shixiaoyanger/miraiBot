@@ -36,7 +36,7 @@ fun MessageChainBuilder.build(defaultMessage: String): MessageChain {
 
 fun BufferedImage.uploadAsImage(contact: Contact): Image {
     ByteArrayOutputStream().use { os ->
-        ImageIO.write(this, "jpeg", os)
+        ImageIO.write(this, "png", os)
         return runBlocking { ByteArrayInputStream(os.toByteArray()).use { it.uploadAsImage(contact) } }
     }
 }

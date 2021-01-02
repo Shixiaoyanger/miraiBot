@@ -20,13 +20,10 @@ class DrawImageImpl(width: Int, height: Int, baseColor: Color) : DrawImage {
     private val background: BufferedImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
     private val g: Graphics2D
 
-    inner class Coordinate(
+    data class Coordinate(
             var x: Int,
             var y: Int,
-    ) {
-        operator fun component1() = x
-        operator fun component2() = y
-    }
+    )
 
     private val xy = Coordinate(0, 0)
 
@@ -118,7 +115,7 @@ class DrawImageImpl(width: Int, height: Int, baseColor: Color) : DrawImage {
         val (x, y) = xy
         val iconPath = "/images/stage_types/${stageType.value}.png"
         val imgStream = object {}::class.java.getResourceAsStream(iconPath)
-        val icon = getZoomImage(ImageIO.read(imgStream), 0.6)
+        val icon = ImageIO.read(imgStream).zoom(0.6)
 
         g.drawImage(icon, x + 10 + RuleWidth + StageWidth - icon.width / 2, y + StageHeight / 2 - icon.height / 2, null)
     }
@@ -176,12 +173,13 @@ class DrawImageImpl(width: Int, height: Int, baseColor: Color) : DrawImage {
         return Font.createFont(Font.TRUETYPE_FONT, fontStream)
     }
 
-    private fun getZoomImage(image: BufferedImage, zoomRate: Double): BufferedImage {
 
-        val width = (image.width * zoomRate).toInt()
-        val height = (image.height * zoomRate).toInt()
+    private fun BufferedImage.zoom(zoomRate: Double): BufferedImage {
 
-        return getFixedImage(image, width, height)
+        val width = (this.width * zoomRate).toInt()
+        val height = (this.height * zoomRate).toInt()
+
+        return getFixedImage(this, width, height)
     }
 
     private fun getFixedImage(image: BufferedImage, width: Int, height: Int): BufferedImage {

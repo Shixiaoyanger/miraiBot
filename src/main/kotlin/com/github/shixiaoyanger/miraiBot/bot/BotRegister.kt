@@ -101,7 +101,7 @@ fun Bot.messageDSL() {
 
             val result = executeCommand(this)
             println(result)
-            if (!result.isEmpty()) {
+            if (result.isNotEmpty()) {
                 this.subject.sendMessage(result)
             }
         }
