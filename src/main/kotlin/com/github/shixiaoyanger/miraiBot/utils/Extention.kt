@@ -42,7 +42,7 @@ fun BufferedImage.uploadAsImage(contact: Contact): Image {
 }
 
 fun String.asMessageChain(): MessageChain {
-    return PlainText(this).asMessageChain()
+    return PlainText(this).toMessageChain()
 }
 
 // 判断是否是英文
