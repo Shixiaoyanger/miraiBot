@@ -1,8 +1,10 @@
 package com.github.shixiaoyanger.miraiBot.command.customCommand
 
 import cn.hutool.core.io.IORuntimeException
-import com.github.shixiaoyanger.miraiBot.bot.BotData
+import com.github.shixiaoyanger.miraiBot.bot.BotData.groups
+import com.github.shixiaoyanger.miraiBot.bot.BotData.rsshubFeeds
 import com.github.shixiaoyanger.miraiBot.bot.BotData.serviceLogger
+import com.github.shixiaoyanger.miraiBot.bot.BotData.users
 import com.github.shixiaoyanger.miraiBot.bot.Group.Companion.getGroup
 import com.github.shixiaoyanger.miraiBot.bot.User.Companion.getUser
 import com.github.shixiaoyanger.miraiBot.command.ChatCommand
@@ -10,7 +12,7 @@ import com.github.shixiaoyanger.miraiBot.utils.RssUtil.getImage
 import com.github.shixiaoyanger.miraiBot.utils.RssUtil.getRsshubSource
 import com.github.shixiaoyanger.miraiBot.utils.build
 import com.rometools.rome.io.ParsingFeedException
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import net.mamoe.mirai.event.events.FriendEvent
 import net.mamoe.mirai.event.events.GroupEvent
 import net.mamoe.mirai.event.events.GroupTempMessageEvent
@@ -70,8 +72,8 @@ class RsshubCommand : ChatCommand {
 
         try {
             val feed = getRsshubSource(url)
-            if (!BotData.rsshubFeeds.containsKey(url)) {
-                BotData.rsshubFeeds[url] = feed
+            if (!rsshubFeeds.containsKey(url)) {
+                rsshubFeeds[url] = feed
             }
             when (event) {
                 //TODO 确认事件个数
@@ -122,6 +124,7 @@ class RsshubCommand : ChatCommand {
         }
 
         return if (deleted) {
+            GlobalScope.launch(Dispatchers.Default) { removeUselessFeed(url) }
             message.build("退订成功！")
         } else {
             message.build("你没有订阅，请重试！")
@@ -140,7 +143,7 @@ class RsshubCommand : ChatCommand {
                     else -> emptySet()
                 }
         subscribeLinks.forEach { link ->
-            val feed = BotData.rsshubFeeds[link]
+            val feed = rsshubFeeds[link]
             feed?.let {
                 message.add("${it.title}  ${it.subscribeUrl}\n")
             }
@@ -149,4 +152,19 @@ class RsshubCommand : ChatCommand {
         return message.build("你还没有任何订阅哦！")
     }
 
+    // 删除不再使用的订阅链接
+    private suspend fun removeUselessFeed(url: String) = withContext(Dispatchers.Default) {
+        if (
+                groups.values.parallelStream()
+                        .filter { it.rsshubSubscribeLinks.contains(url) }
+                        .count()
+                +
+                users.values.parallelStream()
+                        .filter { it.rsshubSubscribeLinks.contains(url) }
+                        .count()
+                == 0L
+        ) {
+            rsshubFeeds.remove(url)
+        }
+    }
 }
