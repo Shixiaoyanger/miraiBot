@@ -88,7 +88,14 @@ object RssUtil {
         return try {
             defaultLogger.verbose("RssUtil.getImage:开始下载图片")
             val response = HttpRequest.get(imageUrl).execute()
-            return response.bodyStream()
+            return when (response.status) {
+                200 -> response.bodyStream()
+                302 -> getImage(response.header("Location"))
+                else -> {
+                    serviceLogger.verbose("RssUtil.getImage:statusCode:${response.status}, $imageUrl")
+                    null
+                }
+            }
         } catch (e: Exception) {
             serviceLogger.verbose("RssUtil.getImage:${e.message}, $imageUrl", e)
             null
