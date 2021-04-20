@@ -11,6 +11,7 @@ import net.mamoe.mirai.utils.MiraiInternalApi
 import net.mamoe.mirai.utils.MiraiLogger
 import net.mamoe.mirai.utils.PlatformLogger
 import net.mamoe.yamlkt.Yaml
+import net.mamoe.yamlkt.Yaml.Default
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -126,11 +127,14 @@ object BotData {
      */
     private fun loadConfig(): Config {
         val data = File("config.yml").readContent()
-        return Yaml.nonStrict.decodeFromString(Config.serializer(), data)
+        return Yaml {
+            nonStrictNumber = true
+            nonStrictNullability = true
+        }.decodeFromString(Config.serializer(), data)
     }
 
     private fun saveConfig() {
-        val data = Yaml.default.encodeToString(config)
+        val data = Default.encodeToString(config)
         File("config.yml").writeText(data)
     }
 
