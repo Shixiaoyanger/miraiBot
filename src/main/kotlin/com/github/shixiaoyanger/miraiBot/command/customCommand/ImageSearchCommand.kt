@@ -10,9 +10,11 @@ import com.github.shixiaoyanger.miraiBot.utils.RssUtil.getImage
 import com.github.shixiaoyanger.miraiBot.utils.build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.contact.Contact.Companion.sendImage
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.*
-import net.mamoe.mirai.message.upload
+import net.mamoe.mirai.message.data.Image.Key.queryUrl
+import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import kotlin.system.measureTimeMillis
 
 class ImageSearchCommand : ChatCommand {
@@ -79,7 +81,7 @@ class ImageSearchCommand : ChatCommand {
             //TODO 发送原图
             val image = getImage(result.microUrl)
             result.title?.let { message.add("标题：$it\n") }
-            withContext(Dispatchers.IO) { image?.let { message.add(it.upload(event.subject)) } }
+            withContext(Dispatchers.IO) { image?.use { message.add(it.uploadAsImage(event.subject)) } }
             message.add("相似度：${result.similarity}\n")
             message.add("图片来源：${result.originUrl}")
         }
@@ -103,11 +105,11 @@ class ImageSearchCommand : ChatCommand {
             val image = getKonachanImg(rating = rating)
 
             if (image != null) {
-                event.reply("上传中~")
+                event.subject.sendMessage("上传中~")
                 // 发送时间取决于图片大小和带宽
-                event.sendImage(image)
+                event.subject.sendImage(image)
             } else {
-                event.reply("机器人”哼“了一声，表示不想理你")
+                event.subject.sendMessage("机器人”哼“了一声，表示不想理你")
             }
         }
         defaultLogger.info("setu cost ${cost / 1000}s")

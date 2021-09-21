@@ -15,7 +15,7 @@ object TaskUtil {
 
     fun runTask(pusher: Pusher) {
         runTask(pusher.initialDelay, pusher.period, pusher.timeUnit) {
-            serviceLogger.verbose0("${pusher.name}开始执行")
+            serviceLogger.verbose("${pusher.name}开始执行")
             val start = System.currentTimeMillis()
             try {
                 pusher.push()
@@ -23,7 +23,7 @@ object TaskUtil {
                 serviceLogger.error("runTask error! ${pusher.name}", e)
             }
             val end = System.currentTimeMillis()
-            serviceLogger.verbose0("${pusher.name}执行结束，耗时${(end - start) / 1000}s")
+            serviceLogger.verbose("${pusher.name}执行结束，耗时${(end - start) / 1000}s")
         }
     }
 }

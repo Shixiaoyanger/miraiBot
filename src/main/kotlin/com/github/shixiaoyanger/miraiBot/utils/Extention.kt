@@ -1,10 +1,14 @@
 package com.github.shixiaoyanger.miraiBot.utils
 
-import net.mamoe.mirai.message.data.MessageChain
-import net.mamoe.mirai.message.data.MessageChainBuilder
-import net.mamoe.mirai.message.data.PlainText
-import net.mamoe.mirai.message.data.asMessageChain
+import kotlinx.coroutines.runBlocking
+import net.mamoe.mirai.contact.Contact
+import net.mamoe.mirai.message.data.*
+import net.mamoe.mirai.utils.ExternalResource.Companion.uploadAsImage
 import java.awt.Graphics
+import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import javax.imageio.ImageIO
 
 
 fun Graphics.drawVerticalString(str: String, x: Int, y: Int) {
@@ -30,8 +34,15 @@ fun MessageChainBuilder.build(defaultMessage: String): MessageChain {
     }
 }
 
+fun BufferedImage.uploadAsImage(contact: Contact): Image {
+    ByteArrayOutputStream().use { os ->
+        ImageIO.write(this, "png", os)
+        return runBlocking { ByteArrayInputStream(os.toByteArray()).use { it.uploadAsImage(contact) } }
+    }
+}
+
 fun String.asMessageChain(): MessageChain {
-    return PlainText(this).asMessageChain()
+    return PlainText(this).toMessageChain()
 }
 
 // 判断是否是英文

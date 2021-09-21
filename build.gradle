@@ -1,49 +1,48 @@
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
     }
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version "1.4.10"
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
-
+    id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
+    id "org.jetbrains.kotlin.plugin.serialization" version "${kotlinVersion}"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
-def mainClass = 'com.github.shixiaoyanger.miraiBot.MainKt'
-group = 'com.github.shixiaoyanger'
-version = '1.0-SNAPSHOT'
+def miraiCore = "2.7.1"
+def mainClass = "com.github.shixiaoyanger.miraiBot.MainKt"
+group = "com.github.shixiaoyanger"
+version = "1.1-SNAPSHOT"
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
 dependencies {
 
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.2.2"
 
-    implementation("net.mamoe:mirai-core-qqandroid:1.3.3")
-    implementation("net.mamoe.yamlkt:yamlkt:0.7.4")
+    implementation "net.mamoe:mirai-core-all:$miraiCore"
 
-    implementation("com.rometools:rome:1.15.0")
+    implementation("net.mamoe.yamlkt:yamlkt:0.10.2")
 
-    implementation("org.jsoup:jsoup:1.3.1")
+    implementation("com.rometools:rome:1.16.0")
 
-    implementation 'cn.hutool:hutool-http:5.4.2'
-    implementation 'cn.hutool:hutool-crypto:5.4.2'
-    implementation 'cn.hutool:hutool-system:5.4.2'
+    implementation("org.jsoup:jsoup:1.14.2")
 
-    implementation 'org.slf4j:slf4j-nop:1.7.30'
+    implementation "cn.hutool:hutool-http:5.7.13"
+    implementation "cn.hutool:hutool-crypto:5.7.13"
+    implementation "cn.hutool:hutool-system:5.7.13"
+
+    implementation "org.slf4j:slf4j-nop:1.7.32"
 
 
-    implementation ("com.hiczp:bilibili-api:0.2.0")
+    implementation("com.hiczp:bilibili-api:0.2.0")
 }
 jar {
     manifest {
-        attributes 'Main-Class': mainClass
+        attributes "Main-Class": mainClass
     }
 }
 
@@ -52,6 +51,10 @@ shadowJar {
 }
 
 compileKotlin {
-    kotlinOptions.jvmTarget = '1.8'
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = ["-Xopt-in=kotlin.RequiresOptIn", "-XXLanguage:+InlineClasses"]
+    }
+
 }
 

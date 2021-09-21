@@ -13,20 +13,18 @@ import com.github.shixiaoyanger.miraiBot.utils.TimeUtils
 import com.github.shixiaoyanger.miraiBot.utils.TimeUtils.getDateTime
 import com.github.shixiaoyanger.miraiBot.utils.writeAppend
 import kotlinx.coroutines.runBlocking
-import net.mamoe.mirai.Bot
-import net.mamoe.mirai.alsoLogin
+import net.mamoe.mirai.*
 import net.mamoe.mirai.contact.isBotMuted
 import net.mamoe.mirai.event.*
-import net.mamoe.mirai.getFriendOrNull
-import net.mamoe.mirai.join
-import net.mamoe.mirai.message.GroupMessageEvent
+import net.mamoe.mirai.event.events.GroupMessageEvent
+import net.mamoe.mirai.utils.MiraiInternalApi
 import net.mamoe.mirai.utils.PlatformLogger
 import net.mamoe.mirai.utils.secondsToMillis
 import java.util.concurrent.TimeUnit
 
-
+@OptIn(MiraiInternalApi::class)
 suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
-    val bot = Bot(
+    val bot = BotFactory.newBot(
             qq = qq,
             password = password
     ) {
@@ -34,16 +32,16 @@ suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
         protocol = config.protocol
         heartbeatPeriodMillis = config.heartbeatPeriod.secondsToMillis
         botLoggerSupplier = { it ->
-            PlatformLogger("Bot${it.id}", {
+            PlatformLogger("Bot${it.id}") {
                 defaultLog.writeAppend(it + "\n")
                 println(it)
-            })
+            }
         }
         networkLoggerSupplier = { it ->
-            PlatformLogger("Net${it.id}", {
+            PlatformLogger("Net${it.id}") {
                 defaultLog.writeAppend(it + "\n")
                 println(it)
-            })
+            }
         }
 
         fileBasedDeviceInfo("device.json") // 使用 "device.json" 保存设备信息
@@ -61,7 +59,7 @@ suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
         Runtime.getRuntime().addShutdownHook(Thread {
             try {
                 BotData.saveData()
-                runBlocking { bot.getFriendOrNull(adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
+                runBlocking { bot.getFriend(adminQQ)?.sendMessage("${config.protocol}:数据保存成功") }
                 serviceLogger.info("数据保存成功")
             } catch (e: Exception) {
                 serviceLogger.error("数据保存失败", e)
@@ -76,10 +74,10 @@ suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
         serviceLogger.info("start QQ bot successfully!")
     } catch (e: Exception) {
         serviceLogger.error("初始化失败! $e")
-        bot.getFriendOrNull(adminQQ)?.sendMessage("${config.protocol}:机器人启动时发生了一些错误，${e.message}")
+        bot.getFriend(adminQQ)?.sendMessage("${config.protocol}:机器人启动时发生了一些错误，${e.message}")
     }
     val time = getDateTime(System.currentTimeMillis(), TimeUtils.Format.hms)
-    bot.getFriendOrNull(adminQQ)?.sendMessage("${config.protocol}:机器人在$time 启动成功")
+    bot.getFriend(adminQQ)?.sendMessage("${config.protocol}:机器人在$time 启动成功")
 
     bot.join()//等到直到断开连接
 }
@@ -97,13 +95,13 @@ suspend fun startQQBot(qq: Long, password: String, adminQQ: Long) {
  */
 fun Bot.messageDSL() {
     // 监听这个 bot 的来自所有群和好友的消息
-    this.subscribeMessages {
+    eventChannel.subscribeMessages {
         always {
             if (this is GroupMessageEvent && group.isBotMuted) return@always
 
             val result = executeCommand(this)
             println(result)
-            if (!result.isEmpty()) {
+            if (result.isNotEmpty()) {
                 this.subject.sendMessage(result)
             }
         }

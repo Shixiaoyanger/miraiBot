@@ -6,7 +6,7 @@ import com.github.shixiaoyanger.miraiBot.model.translate.Google
 import com.github.shixiaoyanger.miraiBot.model.translate.Language
 import com.github.shixiaoyanger.miraiBot.utils.asMessageChain
 import com.github.shixiaoyanger.miraiBot.utils.isEnglish
-import net.mamoe.mirai.message.MessageEvent
+import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 
 /**
